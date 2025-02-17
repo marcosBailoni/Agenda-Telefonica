@@ -6,8 +6,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "Contatos")
 public class Contato {
 
 	@Id
@@ -61,11 +63,11 @@ public class Contato {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
+	}	
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(number);
 	}
 
 	@Override
@@ -77,8 +79,14 @@ public class Contato {
 		if (getClass() != obj.getClass())
 			return false;
 		Contato other = (Contato) obj;
-		return id == other.id && Objects.equals(name, other.name);
+		return Objects.equals(number, other.number);
 	}
+
+	@Override
+	public String toString() {
+		return "Contato [id=" + id + ", name=" + name + ", number=" + number + ", email=" + email + "]";
+	}
+	
 	
 	
 }
