@@ -136,5 +136,22 @@ public class DAO {
 			throw new PersonalizedExcepetion("Erro inesperado ao alterar o contato");
 		}
 	}
+	
+	public void removeContato(Contato contato) {
+		if(contatoExists(contato)) {
+			try {
+				Contato ce = em.find(Contato.class, contato.getId());
+				openT();				
+				em.remove(ce);
+				sendT();
+			}
+			catch (Exception e) {
+				if(em.getTransaction().isActive()) {
+					em.getTransaction().rollback();
+				}
+				System.out.println("Fail trying to delete: " + e.getMessage());
+			} 
+		}
+	}
 
 }
