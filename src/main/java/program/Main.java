@@ -20,13 +20,13 @@ public class Main {
 			dao.atomicPersist(c3);
 			dao.atomicPersist(c4);
 			dao.atomicPersist(c4);
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		
 		try {
 			System.out.println(dao.findAll());
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		} 
 		
