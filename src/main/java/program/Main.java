@@ -14,11 +14,21 @@ public class Main {
 		
 		DAO dao = new DAO();
 		
-		dao.atomicPersist(c1);
-		dao.atomicPersist(c2);
-		dao.atomicPersist(c3);
-		dao.atomicPersist(c4);
-		dao.atomicPersist(c4);
+		try {
+			dao.atomicPersist(c1);
+			dao.atomicPersist(c2);
+			dao.atomicPersist(c3);
+			dao.atomicPersist(c4);
+			dao.atomicPersist(c4);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			System.out.println(dao.findAll());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		
 		dao.closeDAO();
 	}
