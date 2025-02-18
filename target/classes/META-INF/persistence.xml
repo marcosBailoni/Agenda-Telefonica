@@ -7,7 +7,6 @@
     
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
-        <mapping-file>META-INF/orm.xml</mapping-file>
         
         <!-- Registro das entidades -->
 <!--          <class>entities.Usuario</class>   -->

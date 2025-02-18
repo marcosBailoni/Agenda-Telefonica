@@ -3,6 +3,7 @@ package infra;
 import java.util.List;
 
 import entities.Contato;
+import exceptions.PersonalizedExcepetion;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -46,10 +47,10 @@ public class DAO {
 	
 	
 	public DAO persist(Contato contato){
-		if(!existsContato(contato)) {
+		if(!contatoExists(contato)) {
 			em.persist(contato);
 		} else {
-			throw new RuntimeException("Contato já cadastrado");
+			throw new PersonalizedExcepetion("Contato já cadastrado");
 		}
 		return this;
 	}
@@ -61,7 +62,7 @@ public class DAO {
 	public Contato findById(int id){
 		Contato contato = em.find(Contato.class, id);
 		if(contato == null) {
-			throw new RuntimeException("Contato não existe");
+			throw new PersonalizedExcepetion("Contato não existe");
 		} else {
 			return contato;
 		}
@@ -80,13 +81,6 @@ public class DAO {
 		return query.getResultList();
 	}
 	
-	public boolean existsContato(Contato contato) {
-		String jpql = "SELECT c FROM Contato c WHERE c.number = :number";
-		TypedQuery<Contato> query = em.createQuery(jpql, Contato.class);
-		query.setParameter("number", contato.getNumber());
-		List<Contato> list = query.getResultList();
-		return !list.isEmpty();
-	}
 	
 	public void closeDAO() {  
 	    if (em != null && em.isOpen()) {  
@@ -98,12 +92,29 @@ public class DAO {
 	    String jpql = "SELECT c FROM Contato c WHERE c.number = :number";
 	    TypedQuery<Contato> query = em.createQuery(jpql, Contato.class);
 	    query.setParameter("number", contato.getNumber());
+	    
 	    try {
 	        return query.getSingleResult();  // Retorna o único contato encontrado
 	    } catch (NoResultException e) {
-	        throw new RuntimeException("Contato não existe");
+	    	throw new PersonalizedExcepetion("Contato não cadastrado");	        
 	    }
 	}
+	
+	public boolean contatoExists(Contato contato) {
+	    try {
+	        String jpql = "SELECT c FROM Contato c WHERE c.number = :number";
+	        TypedQuery<Contato> query = em.createQuery(jpql, Contato.class);
+	        query.setParameter("number", contato.getNumber());
+	        
+	        return query.getSingleResult() != null;
+	    } catch (NoResultException e) {
+	        return false; // Nenhum contato encontrado, então não existe
+	    } catch (Exception e) {
+	        System.err.println("Erro ao verificar se o contato existe: " + e.getMessage());
+	        return false; // Falha inesperada
+	    }
+	}
+
 	
 	
 }
