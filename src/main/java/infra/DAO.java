@@ -140,10 +140,14 @@ public class DAO {
 	public void removeContato(Contato contato) {
 		if(contatoExists(contato)) {
 			try {
+				
 				Contato ce = em.find(Contato.class, contato.getId());
-				openT();				
-				em.remove(ce);
-				sendT();
+				if(ce != null) {
+					openT();				
+					em.remove(ce);
+					sendT();					
+				}
+				
 			}
 			catch (Exception e) {
 				if(em.getTransaction().isActive()) {
